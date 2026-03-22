@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient tracker</title>
+    <style>
+        body{height: 100vh;}
+        .menu{
+            display: none;flex-wrap: wrap;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid;border-radius: 10px;
+            width: 80%;padding: 20px;position: relative;
+            left: 50%;top: 50%;transform: translate(-50%, -50%);
+            height: 80%;align-items: center;
+            justify-content: center;
+        }
+
+        .menu button{
+            width: 40%;margin: 10px;
+            height: 40%;border: 5px solid blue;
+            font-size: 50px;border-radius: 20px;background: lightblue;
+            transition: 300ms;
+        }
+
+        .menu button:hover{
+            opacity: 60%;transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .addpatient{
+            display: none;width: 100%;
+            height: 100%;background: rgba(0, 0, 255, 0.4);
+        }
+
+        .patcon{
+            position: absolute;left: 50%;top: 50%;
+            transform: translate(-50%,-50%);
+            width: 600px;height: 500px;
+            border: 2px solid;background: lightblue;
+            border: 3px solid blue;border-radius: 15px;
+            display: flex;flex-direction: column;
+            padding: 20px;justify-content: center;gap: 20px;
+        }
+
+        .patcon input{
+            padding: 20px 10px;border: 3px solid;
+            font-size: large;border-radius: 15px;
+        }
+
+        .patcon button{
+            padding: 10px;border: 2px solid blue;
+            background: rgb(75, 204, 247);
+            border-radius: 10px;transition: 300ms;
+        }
+
+        .patcon button:hover{scale: 1.1;}
+
+        .exitbutton{
+            position: absolute;right: 0;top: 0;
+            border: 2px solid red;color: red;
+            transition: 300ms;width: 20px;height: 20px;
+            display: flex;align-items: center;justify-content: center;
+        }
+
+        .exitbutton:hover{color: white;background: red;scale: 1.05; }
+
+        .seedata{
+            border: 5px solid green;border-radius: 20px;
+            background: lightgreen;position: absolute;
+            top: 50%;left: 50%;transform: translate(-50%,-50%);
+            width: 80%;height: 80%;display: none;
+            align-items: center;flex-wrap: wrap;
+            flex-direction: column;padding: 20px;overflow: auto;
+        }
+
+        .data{
+            width: 80%;height: 100px;
+            border: 2px solid green;
+            border-radius: 10px;display: flex;
+        }
+
+        .data div, .header div{
+            border: 2px solid green;display: flex;
+            align-items: center;justify-content: center;
+            font-size: 20px;
+        }
+
+        .header{
+            width: 80%;border: 2px solid green;
+            border-radius: 10px;display: flex;height: 50px;
+            background: darkgreen;color: white;font-size: 25px;
+        }
+
+        .data div:first-child, .header div:first-child{width: 30%;}
+        .data div:nth-child(2), .header div:nth-child(2){width: 20%;}
+        .data div:last-child, .header div:last-child{flex: 1;}
+
+        .datapage{
+            position: absolute;top: 50%;left: 50%;
+            transform: translate(-50%,-50%);width: 80%;height: 80%;display: none;
+            align-items: center;justify-content: center;
+            background: rgba(255, 0, 0, 0.6);border: 3px solid red;
+        }
+
+        select{position: absolute;left: 10px;top: 5px;}
+
+        .doctors{
+            position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);
+            border: 5px solid coral;border-radius: 15px;
+            width: 80%;height: 80%;background: lightpink;padding: 20px;
+            overflow: auto;display: flex;flex-wrap: wrap;justify-content: center;
+        }
+
+        .doctors .doctor{
+            width: 40%;height: 300px;margin: 5px;border-radius: 20px;
+            border: 2px solid red; display: flex;
+            align-items: center;flex-direction: column;transition: 1s;
+        }
+
+        .doctor .imagehold{
+            margin-top: 5px;border-radius: 10px;
+            height: 40%;border: 2px solid;max-width: 70%;min-width: 65%;
+            display: flex;align-items:baseline;
+            justify-content: baseline;overflow: hidden;transition: 1s;
+        }
+
+        .doctor:hover{transform: translateY(-10px);box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6) ;}
+        .imagehold img{width: 150%;transition: 300ms;}
+        .doctor:hover .imagehold{align-items:center;justify-content: center;}
+        .doctor:hover .imagehold > img{width: 100%;}
+    </style>
+</head>
+<body>
+
+    <div class="menu"  id="menu">
+        <button onclick="showPatient()">Add Patient</button>
+        <button onclick="pagedata()">patient</button>
+        <button onclick="showChartPage()">Data</button>
+        <button onclick="Doctors()">Doctors</button>
+    </div>
+
+    <div class="addpatient">
+        <div class="patcon">
+            <button class="exitbutton" onclick="showMain()">x</button>
+            <input type="text" placeholder="Patient Name">
+            <input type="text" placeholder="Patient Gender">
+            <input type="text" placeholder="Patient Medical Concern">
+            <button onclick="addRecords()">Add</button>
+        </div>
+    </div>
+    <div class="seedata"></div>
+    <div class="datapage">
+        <button class="exitbutton" onclick="showMain()">x</button>
+        <select name="" id="" onchange="cal(this)">
+            <option value="Gender">Gender</option>
+            <option value="Record">Record</option>
+        </select>
+        <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+    </div>
+    <div class="doctors"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0"></script>
+    
+    <script>
+        let patient = []
+        let button = document.querySelector(".menu").querySelectorAll("button");
+        let color = ["blue","green", "red","pink"]
+        button.forEach((v,i)=>{v.style.background = color[i]})
+
+        function erase(){
+            let divs = document.querySelectorAll("body > div")
+            divs.forEach((v)=>{v.style.display = "none"})
+        }
+
+
+        function pagedata(){
+            erase();document.querySelector(".seedata").style.display = "flex";
+            let html = `<button class="exitbutton" onclick="showMain()">x</button>
+            <div class="header"><div>Name</div><div>Gender</div><div>Record</div></div>`
+            patient.forEach((v,i)=>{html +=`<div class="data"><div>${v.Name}</div><div>${v.Gender}</div><div>${v.Record}</div></div>`})
+            document.querySelector(".seedata").innerHTML = html
+        }
+
+        function showMain(){erase();document.querySelector("#menu").style.display = "flex"}
+        function showPatient(){erase();document.querySelector(".addpatient").style.display = "block"}
+
+        function addRecords(){
+            let data = {};let label = ["Name","Gender", "Record"];let datas = document.querySelectorAll(".patcon > input")
+            datas.forEach((v,i)=>{data[label[i]] = v.value;v.value = ""});patient.push(data);alert("patient added")
+        }
+
+    
+
+        function cal(v){
+            let newdata = {}
+            patient.forEach((r)=>{
+                if (r[v.value] in newdata) {
+                        newdata[r[v.value]] += 1;
+                } else {
+                        newdata[r[v.value]] = 1;
+                }
+            })
+
+
+            showData(newdata);
+        }
+        let myChartInstance = null; 
+
+        function showData(newdata) {
+            let xValues = Object.keys(newdata);
+            let yValues = Object.values(newdata);
+            let barColors = ["#b91d47", "#00aba9","#2b5797","#e8c3b9","#1e7145","green"];
+            let ctx = document.getElementById('myChart');
+
+            if (myChartInstance) {myChartInstance.destroy(); }
+
+            myChartInstance = new Chart(ctx, {
+                type: "pie",data: {
+                    labels: xValues,
+                    datasets: [{backgroundColor: barColors,data: yValues}]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: true },
+                        title: {
+                            display: true,
+                            text: "Patient Data Chart",
+                            font: { size: 16 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function showChartPage() {
+            erase();document.querySelector(".datapage").style.display = "flex";
+            if (patient.length === 0) {alert("No patients yet!");showMain();return;}
+            document.querySelector("select").value = "Gender"; 
+            cal(document.querySelector("select")); 
+        }
+        let doctors =[
+            {name: "Juan",img: "https://portraitpal.ai/wp-content/uploads/2024/10/Linkedin-headshot.jpg",pro: "doctor"},
+            {name: "Maria",img: "https://portraitpal.ai/wp-content/uploads/2024/10/Linkedin-headshot-female-1.jpg",pro: "teacher"},
+            {name: "Carlos",img: "https://portraitpal.ai/wp-content/uploads/2024/10/Linkedin-headshot-male-2.jpg",pro: "engineer"},
+            {name: "Sofia",img: "https://portraitpal.ai/wp-content/uploads/2024/10/Linkedin-headshot-female-2.jpg",pro: "nurse"},
+            {name: "Miguel",img: "https://portraitpal.ai/wp-content/uploads/2024/10/Linkedin-headshot-male-3.jpg",pro: "lawyer"}
+        ]
+        function Doctors(){
+            erase();let data = `<button class="exitbutton" onclick="showMain()">x</button>`
+            doctors.forEach((v)=>{
+                data+=`<div class="doctor"><div class="imagehold"><img src=${v.img} alt=""></div>
+                    <h1>${v.name}</h1><h3>${v.pro}</h3></div>`
+            })
+            document.querySelector(".doctors").innerHTML =data
+            document.querySelector(".doctors").style="flex"
+        }
+    </script>
+</body>
+</html>
