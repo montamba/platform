@@ -188,22 +188,19 @@ body{
 <script>
     const pages=["page1","page2","page3"];
     function showPage(id){
-        pages.forEach(
-            p=>{document.getElementById(p).style.display="none";}
-          )
+        pages.forEach(p=>{document.getElementById(p).style.display="none";})
         document.getElementById(id).style.display="block";
-
     }
 
     const houses=[
-        {name:"GiL Store/Boarding House",img:"thumbnail (1).jpg",coords:[10.691904,122.567859],desc:"Nice and quiet boarding house."},
-        {name:"Malhabour Boarding House",img:"g.jpg.png",coords:[10.695935,122.554871],desc:"Affordable stay with friendly owner."},
-        {name:"3J and R Boarding House",img:"f.jfif",coords:[10.711453,122.557811],desc:"Clean and cozy rooms."},
-        {name:"BOARDING HOUSE",img:"k.jfif",coords:[10.698027,122.561705],desc:"Spacious rooms with good ventilation."},
-        {name:"Villasor Boarding House",img:"p.jfif",coords:[10.697869,122.560638],desc:"Close to main road and shops."},
-        {name:"Gonzaga Boarding House",img:"thumbnail.jfif",coords:[10.707146,122.565963],desc:"Modern interiors and safe location."},
-        {name:"Vinco Boarding House",img:"u.jfif",coords:[10.711618,122.566618],desc:"Bright rooms with balcony."},
-        {name:"Rency Boarding House",img:"t.jfif",coords:[10.711700,122.563342],desc:"Budget friendly and accessible."}
+        {name:"GiL Store/Boarding House", img:"https://source.unsplash.com/400x400/?house,1", coords:[10.691904,122.567859], desc:"Nice and quiet boarding house."},
+        {name:"Malhabour Boarding House", img:"https://source.unsplash.com/400x400/?house,2", coords:[10.695935,122.554871], desc:"Affordable stay with friendly owner."},
+        {name:"3J and R Boarding House", img:"https://source.unsplash.com/400x400/?house,3", coords:[10.711453,122.557811], desc:"Clean and cozy rooms."},
+        {name:"BOARDING HOUSE", img:"https://source.unsplash.com/400x400/?house,4", coords:[10.698027,122.561705], desc:"Spacious rooms with good ventilation."},
+        {name:"Villasor Boarding House", img:"https://source.unsplash.com/400x400/?house,5", coords:[10.697869,122.560638], desc:"Close to main road and shops."},
+        {name:"Gonzaga Boarding House", img:"https://source.unsplash.com/400x400/?house,6", coords:[10.707146,122.565963], desc:"Modern interiors and safe location."},
+        {name:"Vinco Boarding House", img:"https://source.unsplash.com/400x400/?house,7", coords:[10.711618,122.566618], desc:"Bright rooms with balcony."},
+        {name:"Rency Boarding House", img:"https://source.unsplash.com/400x400/?house,8", coords:[10.711700,122.563342], desc:"Budget friendly and accessible."}
     ];
 
     function loginUser(){
@@ -241,7 +238,10 @@ body{
     function showHouse(i){
         const h=houses[i];
         showPage("page3");
-        document.getElementById("details").innerHTML=`<h2>${h.name}</h2><img src="${h.img}" style="width:100%;border-radius:10px;margin-top:10px;"><p>${h.desc}</p>;`
+        document.getElementById("details").innerHTML=`
+            <h2>${h.name}</h2>
+            <img src="${h.img}" style="width:100%;border-radius:10px;margin-top:10px;">
+            <p>${h.desc}</p>`;
         if(!map){
             map=L.map("map").setView(h.coords,15);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map);
@@ -251,6 +251,7 @@ body{
         if(currentMarker){map.removeLayer(currentMarker);}
         currentMarker=L.marker(h.coords).addTo(map).bindPopup(`<b>${h.name}</b>`).openPopup();
     }
+
     function showFullMap(){
         showPage("page3");
         document.getElementById("details").innerHTML="";
@@ -258,10 +259,11 @@ body{
             map=L.map("map").setView([10.692232,122.573977],12);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map);
         }else{
-            map.setView([14.5995,120.9842],12);
+            map.setView([10.692232,122.573977],12);
             if(currentMarker){map.removeLayer(currentMarker);currentMarker=null;}
         }
     }
+
     function backToGallery(){
         showPage("page2");
     }
